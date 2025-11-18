@@ -1,0 +1,12 @@
+^(?P<ip>\d+\.\d+\.\d+\.\d+)
+\s+-\s+-\s+
+\[(?P<time_local>[^\]]+)\]\s+
+"(?P<method>GET|POST|HEAD|PUT|DELETE|OPTIONS|PATCH)
+\s+(?P<path>\S+)
+\s+HTTP/[0-9.]+"\s+
+(?P<status>\d{3})\s+
+(?P<body_bytes_sent>\d+)\s+
+"(?P<referer>[^"]*)"\s+
+"(?P<user_agent>[^"]*)"\s+
+"(?P<x_forwarded_for>[^"]*)"\s+
+rt="(?P<request_time>[\d\.]+)"

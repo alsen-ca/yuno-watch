@@ -1,0 +1,6 @@
+services:
+  yuno-watch:
+    ports:
+      - "127.0.0.1:3200:3200"
+    volumes:
+      - .:/home/debrian/Downloads/yuno-watch
