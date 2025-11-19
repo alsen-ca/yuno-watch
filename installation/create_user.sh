@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-CONF_FILE="$(pwd)/yuno-watch.conf"
+CONF_FILE="/home/debrian/Downloads/yuno-watch/yuno-watch.conf"
 if [[ -f "$CONF_FILE" ]]; then
     source "$CONF_FILE"
 else

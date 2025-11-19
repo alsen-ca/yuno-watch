@@ -11,5 +11,5 @@
 
 set -euo pipefail
 
-sh installation/create_user.sh
-sh installation/create_root_folders.sh
+sh /home/debrian/Downloads/yuno-watch/installation/create_user.sh
+sh /home/debrian/Downloads/yuno-watch/installation/create_root_folders.sh

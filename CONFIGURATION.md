@@ -1,7 +1,14 @@
-## Nginx Format
+# Configuration
+The variables defined in yuno-watch.conf are used by the scripts of the library. Feel free to modify them.
+
+But note correct naming conventions. For example, paths with invalid characters like whitespace will cause some scripts to fail.
+
+## NGINX_LOG_FORMAT
 For Yuno Watch to perform summaries and analysis, one can define in the configuration which type of Log Output Format Nginx uses.
 
 Depending on the format used by Nginx, NGINX_LOG_FORMAT might need to be modified to parse the logs appropiatedly.
+
+Be noted that the default_log regex will work with your regex if you added additional rules, but not if you delete any.
 
 Log Format can be checked at /etc/nginx/nginx.conf
 

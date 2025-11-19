@@ -30,3 +30,7 @@ setup() {
     [ "$status" -eq 0 ]
 }
 
+@test "Directory lib exists" {
+    run [ -d "$MYLIB_HOME" ]
+    [ "$status" -eq 0 ]
+}

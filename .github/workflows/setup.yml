@@ -19,11 +19,20 @@ jobs:
 
     - name: Run basic tests for AlmaLinux container
       run: |
-        docker exec yuno Downloads/tests/setup_tests.sh
+        docker exec yuno pwd
+        docker exec yuno Downloads/yuno-watch/tests/setup_tests.sh
+
+    - name: Install bats-core
+      run: |
+        docker exec yuno sudo Downloads/bats-core/install.sh /usr/local
+
+    - name: Install YunoWatch
+      run: |
+        docker exec yuno Downloads/yuno-watch/install.sh
 
     - name: Run installation tests for YunoWatch
       run: |
-        docker exec yuno Downloads/tests/installation_tests.sh
+        docker exec yuno Downloads/yuno-watch/tests/installation_tests.sh
 
     - name: Tear down
       if: always()

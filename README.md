@@ -28,11 +28,13 @@ Note however, modifying some configurations after the project installation might
 Changing the NAME= would require changing the source import in many of the .sh and .py files. Proceed with caution.
 
 ### Modifying Configurations
-If you wish to change any configuration, add the variable to the .conf file to the folder conf.d
+If you wish to change any configuration, change the value of your variable on the yuno-watch.conf
 
-[See possible configurations and their explanations](conf.d/CONFIGURATION.md)
+[See possible configurations and their explanations](CONFIGURATION.md)
 
-conf.d/yuno.conf.inactive shows an example to change which type of Log Format Nginx has on its logs. (Rename to conf.d/yuno.conf to activate)
+You can also call a script with a certain Configuration variable, and that variable will apply to only this one command. Example:
+
+    yuno-watch perform summary 2025-10-11 NGINX_LOG_FORMAT="req"
 
 ## Quick Start
 
@@ -114,7 +116,7 @@ depends_on :new-folder - :rotate-nginx
 ### merge-attack-patterns
 Takes all ATTACK_LOG_OUTPUT and puts it on a summary
 
-depends_on :new-folder - :rotate-nginx - perform-summary
+depends_on :new-folder - :rotate-nginx - :perform-summary
 
 ### compress-og
 Compresses original nginx logs of ROTATION_SUB
@@ -127,3 +129,57 @@ depends_on :new-folder - :rotate-nginx
 Performs deletion of original files after KEEP_OG_LOGS_FOR momths.
 
 depends_on :new-folder - :rotate-nginx
+
+## Performs
+Performs are scripts that are only activated once when they are called and not something constant called like Actions.
+
+These perform commands can be activated as long as the data they need is available to work.
+
+Performs are called like
+
+    yuno-watch perform summary <YY-mm-dd>
+    yuno-watch perform import <YY-mm>
+
+### Summary
+Performs the summary for specific date or date range.
+
+    yuno-watch perform summary <YY-mm-dd>
+    yuno-watch perform summary --month <YY-mm>
+    yuno-watch perform summary --year <YY>
+
+If a date range (month or year) is chosen, then it will create an individual summary per day. If you have PERFORM_VISUAL_SUMMARY, you might not want this.
+
+For such a case, you can call the command --no-visual and alternatively --no-pattern
+
+    yuno-watch perform summary --no-visual --no-pattern --year <YY>
+
+This is equivalent to writing
+
+    yuno-watch perform summary --year <YY> PERFORM_VISUAL_SUMMARY=false PERFORM_SUMMARY_ATTACK=true
+
+You can also just perform the visual summary for a month. Only possible if summary for month already happened
+
+    yuno-watch perform summary --no-pattern --no-basic PERFORM_VISUAL_SUMMARY=true INTERVAL_VISUAL_SUMMARY="monthly"
+
+### Import
+If you already have logs and don't have them summarized or want them on the new structure, this is the command.
+
+It will copy (note: not move. You would need to delete them manually if you wish to save space) a month's worth of files to the location used by YunoWatch.
+
+You need to first have the files copied on a whole folder at SUMMARY_SUB and then
+
+    yuno-watch perform import <YY-mm>
+
+As any before, this can also be called with a custom SUMMARY_SUB if your files lie at another location.
+Do note however, that the target directory must include all the files of a single month on a single folder.
+This also asumes that the files inside follow the nginx naming convention: *access.log-%Y%m%d (e.g., access.log-20251025)
+For example:
+
+    ls /var/backup/my-old-logs/2025-04 = access.log-20250401, access.log-20250402, access.log-20250403, access.log-20250404, etc.   
+    yuno-watch perform import SUMMARY_SUB="/var/backup/my-old-logs/2025-04"
+
+The expected output would be:
+
+    $ROTATION_SUB/2025-04/01/access.log-20250401 $ROTATION_SUB/2025-04/01/error.log-20250401
+    $ROTATION_SUB/2025-04/02/access.log-20250402 $ROTATION_SUB/2025-04/01/error.log-20250402 
+    ...
