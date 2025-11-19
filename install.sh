@@ -8,7 +8,8 @@
 #       - /var/log
 #       - /var/archive
 #       - /var/cache
-#   3. Assigns user to docker-group
-#
-# Author:  Sebastian Alsen
-# Version: 1.1  (2025-11-18)
+
+set -euo pipefail
+
+sh installation/create_user.sh
+sh installation/create_root_folders.sh

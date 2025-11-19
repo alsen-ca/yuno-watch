@@ -1,6 +1,7 @@
 services:
   yuno-watch:
-    ports:
-      - "127.0.0.1:3200:3200"
+    container_name: yuno
+    build:
+      context: .
     volumes:
       - .:/home/debrian/Downloads/yuno-watch

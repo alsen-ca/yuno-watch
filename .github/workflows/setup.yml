@@ -1,0 +1,30 @@
+name: Setup
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  alma-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Run Almalinux Container
+      run: docker compose up --build -d
+
+    - name: Run basic tests for AlmaLinux container
+      run: |
+        docker exec yuno Downloads/tests/setup_tests.sh
+
+    - name: Run installation tests for YunoWatch
+      run: |
+        docker exec yuno Downloads/tests/installation_tests.sh
+
+    - name: Tear down
+      if: always()
+      run: docker compose down
