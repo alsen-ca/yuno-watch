@@ -1,10 +1,7 @@
-#!/bin/sh
-set -eu
+#!/bin/bash
+set -e
 
-cd /home/debrian/Downloads
-chmod +x yuno-watch/tests/*.sh
-chmod +x yuno-watch/tests/setup/*.bats
-chmod +x yuno-watch/tests/installation/*.bats
-chmod +x yuno-watch/install.sh
-
-exec sleep infinity
+sudo /home/debrian/Downloads/bats-core/install.sh /usr/local
+sh /home/debrian/Downloads/yuno-watch/installation-tests/setup_tests.sh
+sh /home/debrian/Downloads/yuno-watch/install.sh
+sh /home/debrian/Downloads/yuno-watch/installation-tests/install_tests.sh

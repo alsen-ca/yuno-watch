@@ -2,7 +2,7 @@ name: Setup
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ draft, main ]
 
 jobs:
   alma-tests:
@@ -14,25 +14,11 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Run Almalinux Container
-      run: docker compose up --build -d
+    - name: Build AlmaLinux container
+      run: docker compose build
 
-    - name: Run basic tests for AlmaLinux container
-      run: |
-        docker exec yuno pwd
-        docker exec yuno Downloads/yuno-watch/tests/setup_tests.sh
-
-    - name: Install bats-core
-      run: |
-        docker exec yuno sudo Downloads/bats-core/install.sh /usr/local
-
-    - name: Install YunoWatch
-      run: |
-        docker exec yuno Downloads/yuno-watch/install.sh
-
-    - name: Run installation tests for YunoWatch
-      run: |
-        docker exec yuno Downloads/yuno-watch/tests/installation_tests.sh
+    - name: Run Almalinux Container and test everything
+      run: docker compose run yuno
 
     - name: Tear down
       if: always()

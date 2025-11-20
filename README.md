@@ -10,6 +10,7 @@ This is not a bundled package, so you might need to perform additional steps tha
 ## Requirements
 - Root / sudo access: Required for installation and changing performing some actions
 - Operating System: Linux (tested on Fedora, CentOS)
+- Git (preferred, but curl also possible): Required for installation
 - Docker (Or change PERFORM_SUMMARY= in Configuration)
 
 ## Installation
@@ -18,6 +19,23 @@ This is not a bundled package, so you might need to perform additional steps tha
 - Optional - Change default configurations if needed
 - yuno-watch/install.sh
 
+## CLI-Wrapper
+To call the scripts for this package, the cli-wrapper at /usr/local/bin should have been install when you yuno-watch/install.sh
+
+This allows you to call the scripts with the appropiate permissions like
+
+    yuno tests all
+    yuno perform summary 2025-12-25
+
+If you were to want a different prefix for calling the scripts, just rename the file.
+
+The actions allowed are the following:
+
+
+    tests - Optional (requires bats installed). Checks  whether the script has been installed correctly
+    [action](#actions) - Long term functionality of the package
+    [perform](#performs)
+    docker
 ## Configurations
 Configurations on this project refer mostly to environmental variables that are used by the scripts of the library.
 
@@ -34,28 +52,28 @@ If you wish to change any configuration, change the value of your variable on th
 
 You can also call a script with a certain Configuration variable, and that variable will apply to only this one command. Example:
 
-    yuno-watch perform summary 2025-10-11 NGINX_LOG_FORMAT="req"
+    yuno perform summary 2025-10-11 NGINX_LOG_FORMAT="req"
 
 ## Quick Start
 
 1. If not yet done, follow the Installation steps.
 2. Get a summary of the steps that will happen
 
-    - yuno-watch is-ready
+    - yuno is-ready
 
 3. Activate the library to create user, paths, etc.
 
-    - yuno-watch activate
+    - yuno activate
 4. Either activate all the actions or only [activate certain actions](#actions).
 
-    - yuno-watch action all 
+    - yuno action all 
     
     Or for example:
 
-    - yuno-watch action new-folder
-    - yuno-watch action rotate-nginx
+    - yuno action new-folder
+    - yuno action rotate-nginx
 
-## Functions
+## What YunoWatch offers
 YunoWatch offers the option to rotate, compress, delete and summarize logs, all automatically.
 
 A future update will also take the summarized attack patterns, make a ML algorithm learn from it and allow Nginx to ask if a suspicious request should be allowed.
@@ -77,21 +95,24 @@ Original logs will be deleted after a certain amount of time passes (default 6 m
 Summaries derivated from original logs will be moved at this time to ROTATION_SUB.
 
 ## Actions
-These actions can be called by yuno-watch action [custom-action].
+Core of the package. These are the functionalities that work long-term. For example rotating the files and making summary every day.
+For these commands to be activated on a repetitive manner, an action must be activated.
+
+These actions can be called by yuno action [custom-action].
 
 For example:
 
-    yuno-watch action new-folder
-    yuno-watch action-rotate-nginx
-    yuno-watch action perform-summary
+    yuno action new-folder
+    yuno action rotate-nginx
+    yuno action perform-summary
 
-Do note however, that some actions need to work together in order to work.
+Do note that some actions need to work together in order to work.
 For this a 'depends_on' has been added to the actions
 
 ### all-actions
 Activates all the possible actions.
 
-What this includes can be configured from WHICH_ALL_ACTIONS.
+This list of actions can be changed on Configuration WHICH_ALL_ACTIONS.
 
 ### new-folder
 Creates a monthly folder
@@ -137,29 +158,29 @@ These perform commands can be activated as long as the data they need is availab
 
 Performs are called like
 
-    yuno-watch perform summary <YY-mm-dd>
-    yuno-watch perform import <YY-mm>
+    yuno perform summary <YY-mm-dd>
+    yuno perform import <YY-mm>
 
 ### Summary
 Performs the summary for specific date or date range.
 
-    yuno-watch perform summary <YY-mm-dd>
-    yuno-watch perform summary --month <YY-mm>
-    yuno-watch perform summary --year <YY>
+    yuno perform summary <YY-mm-dd>
+    yuno perform summary --month <YY-mm>
+    yuno perform summary --year <YY>
 
 If a date range (month or year) is chosen, then it will create an individual summary per day. If you have PERFORM_VISUAL_SUMMARY, you might not want this.
 
 For such a case, you can call the command --no-visual and alternatively --no-pattern
 
-    yuno-watch perform summary --no-visual --no-pattern --year <YY>
+    yuno perform summary --no-visual --no-pattern --year <YY>
 
 This is equivalent to writing
 
-    yuno-watch perform summary --year <YY> PERFORM_VISUAL_SUMMARY=false PERFORM_SUMMARY_ATTACK=true
+    yuno perform summary --year <YY> PERFORM_VISUAL_SUMMARY=false PERFORM_SUMMARY_ATTACK=true
 
 You can also just perform the visual summary for a month. Only possible if summary for month already happened
 
-    yuno-watch perform summary --no-pattern --no-basic PERFORM_VISUAL_SUMMARY=true INTERVAL_VISUAL_SUMMARY="monthly"
+    yuno perform summary --no-pattern --no-basic PERFORM_VISUAL_SUMMARY=true INTERVAL_VISUAL_SUMMARY="monthly"
 
 ### Import
 If you already have logs and don't have them summarized or want them on the new structure, this is the command.
@@ -168,7 +189,7 @@ It will copy (note: not move. You would need to delete them manually if you wish
 
 You need to first have the files copied on a whole folder at SUMMARY_SUB and then
 
-    yuno-watch perform import <YY-mm>
+    yuno perform import <YY-mm>
 
 As any before, this can also be called with a custom SUMMARY_SUB if your files lie at another location.
 Do note however, that the target directory must include all the files of a single month on a single folder.
@@ -176,7 +197,7 @@ This also asumes that the files inside follow the nginx naming convention: *acce
 For example:
 
     ls /var/backup/my-old-logs/2025-04 = access.log-20250401, access.log-20250402, access.log-20250403, access.log-20250404, etc.   
-    yuno-watch perform import SUMMARY_SUB="/var/backup/my-old-logs/2025-04"
+    yuno perform import SUMMARY_SUB="/var/backup/my-old-logs/2025-04"
 
 The expected output would be:
 
