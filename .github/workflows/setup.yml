@@ -18,7 +18,7 @@ jobs:
       run: docker compose -f docker-compose.test.yml build
 
     - name: Run Almalinux Container and test everything
-      run: docker compose -f docker-compose.test.yml run yuno-watch
+      run: docker compose -f docker-compose.test.yml run --rm yuno-watch
 
     - name: Tear down
       if: always()

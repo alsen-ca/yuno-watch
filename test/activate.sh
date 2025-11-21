@@ -1,0 +1,4 @@
+#!/bin/bash
+
+mkdir -p $ROTATION_TEST $SUMMARY_TEST
+chmod 700 $ROTATION_TEST $SUMMARY_TEST

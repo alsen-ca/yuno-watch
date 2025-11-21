@@ -5,6 +5,7 @@ RUN dnf -y update \
         sudo \
         shadow-utils \
         dnf-plugins-core \
+        which \
         git && \
     dnf clean all && \
     rm -rf /var/cache/dnf

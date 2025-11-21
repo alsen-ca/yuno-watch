@@ -34,7 +34,6 @@ sudo -u "$NAME" bash -s "$@" <<'EOF'
     # Centralized logging
     FAILED_COMMAND=""
     FAILED_LINE=""
-    trap 'FAILED_COMMAND="${BASH_COMMAND}"; FAILED_LINE="${BASH_LINENO[0]}"' ERR
 
     timestamp() {
         date --iso-8601=seconds
@@ -56,7 +55,7 @@ sudo -u "$NAME" bash -s "$@" <<'EOF'
         printf "[%s] %s FAILED (exit code %s) - %s %s\n" \
             "$(timestamp)" "$SCRIPT_NAME" "$rc" "$custom_message" "$error_message" >> "$ERROR_OUTPUT"
         echo "$(timestamp) $SCRIPT_NAME failed with exit code $rc. $error_message" >&2
-        echo "Check $ERROR_OUTPUT for details." >&2
+        echo
     }
     log_info() {
         local custom_message="$1"
@@ -69,11 +68,32 @@ sudo -u "$NAME" bash -s "$@" <<'EOF'
     shift
     SCRIPT_NAME="$1"
     shift
-    ARGS=("$@")
 
     case "$COMMAND" in
-        tests|action|perform|docker)
+        test)
             SCRIPT="$BASE_DIR/$COMMAND/$SCRIPT_NAME.sh"
+            if [ ! -f "$SCRIPT" ]; then
+                echo "Error: Test script not found: $SCRIPT" >&2
+                exit 1
+            fi
+            (
+                export TERM=xterm-256color
+                cd "$BASE_DIR"
+                export SUCCESS_OUTPUT="${LOG_OUTPUT}/test.success.log"
+                export ERROR_OUTPUT="${LOG_OUTPUT}/test.error.log"
+                export ROTATION_SUB="$ROTATION_TEST"
+                export SUMMARY_SUB="$SUMMARY_TEST"
+                "$SCRIPT"
+            )
+            ;;
+        action|perform|docker|test)
+            ARGS=("$@")
+            trap 'FAILED_COMMAND="${BASH_COMMAND}"; FAILED_LINE="${BASH_LINENO[0]}"' ERR
+            SCRIPT="$BASE_DIR/$COMMAND/$SCRIPT_NAME.sh"
+            (
+                cd "$BASE_DIR"
+                "$SCRIPT" "${ARGS[@]}"
+            )
             ;;
         *)
             echo "Error: Unknown command '$COMMAND'" >&2
@@ -85,11 +105,6 @@ sudo -u "$NAME" bash -s "$@" <<'EOF'
         echo "Error: Script not found: $SCRIPT" >&2
         exit 1
     fi
-
-    (
-        cd "$BASE_DIR"
-        "$SCRIPT" "${ARGS[@]}"
-    )
 
     log_success "$SCRIPT_NAME" "Script executed successfully"
 EOF

@@ -26,15 +26,15 @@
     [ "$output" = "700" ]
 }
 
-@test "Directory deletion with correct owner and permissions" {
-    run [ -d "deletion" ]
+@test "Directory test with correct owner and permissions" {
+    run [ -d "test" ]
     [ "$status" -eq 0 ]
 
-    run stat -c "%U %G" "deletion"
+    run stat -c "%U %G" "test"
     [ "$status" -eq 0 ]
     [ "$output" = "$NAME $NAME" ]
 
-    run stat -c "%a" "deletion"
+    run stat -c "%a" "test"
     [ "$status" -eq 0 ]
     [ "$output" = "700" ]
 }
