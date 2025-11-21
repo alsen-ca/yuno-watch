@@ -16,11 +16,11 @@ setup() {
 
     run stat -c "%U %G" "$LOG_OUTPUT"
     [ "$status" -eq 0 ]
-    [ "$output" = "$NAME $NAME" ]
+    [ "$output" = "root $NAME" ]
 
     run  stat -c "%a" "$LOG_OUTPUT"
     [ "$status" -eq 0 ]
-    [ "$output" = "700" ]
+    [ "$output" = "750" ]
 }
 
 

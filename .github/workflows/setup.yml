@@ -15,10 +15,10 @@ jobs:
       uses: docker/setup-buildx-action@v2
 
     - name: Build AlmaLinux container
-      run: docker compose build
+      run: docker compose -f docker-compose.test.yml build
 
     - name: Run Almalinux Container and test everything
-      run: docker compose run yuno
+      run: docker compose -f docker-compose.test.yml run yuno-watch
 
     - name: Tear down
       if: always()

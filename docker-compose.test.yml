@@ -1,0 +1,7 @@
+services:
+  yuno-watch:
+    container_name: yuno-watch
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+

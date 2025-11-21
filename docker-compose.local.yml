@@ -1,7 +1,0 @@
-services:
-  yuno:
-    container_name: yuno
-    build:
-      context: .
-    volumes:
-      - .:/home/debrian/Downloads/yuno-watch

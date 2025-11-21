@@ -1,4 +1,4 @@
-# yuno-watch
+# YunoWatch
 Automated lightweight Nginx log workflow – rotation, compression, deletion, parsing, summarising, plus rule generation to block threats.
 
 
@@ -32,10 +32,11 @@ If you were to want a different prefix for calling the scripts, just rename the 
 The actions allowed are the following:
 
 
-    tests - Optional (requires bats installed). Checks  whether the script has been installed correctly
-    [action](#actions) - Long term functionality of the package
-    [perform](#performs)
-    docker
+1. tests - Optional (requires bats installed). Checks  whether the script has been installed correctly
+2. [action](#actions) - Long term functionality of the package
+3. [perform](#performs)
+4. docker
+
 ## Configurations
 Configurations on this project refer mostly to environmental variables that are used by the scripts of the library.
 

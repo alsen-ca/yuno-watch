@@ -77,3 +77,16 @@ setup() {
     [ "$status" -eq 0 ]
     [ "$output" = "700" ]
 }
+
+@test "Configuration file exists with correct owner and permissions" {
+    run sudo test -f "$CONF/yuno-watch.conf"
+    [ "$status" -eq 0 ]
+
+    run sudo stat -c "%U %G" "$CONF/yuno-watch.conf"
+    [ "$status" -eq 0 ]
+    [ "$output" = "$NAME $NAME" ]
+
+    run sudo stat -c "%a" "$CONF/yuno-watch.conf"
+    [ "$status" -eq 0 ]
+    [ "$output" = "700" ]
+}
