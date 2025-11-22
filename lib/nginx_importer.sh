@@ -1,5 +1,5 @@
 #!/bin/bash
-# Make a copy of a Nginx file from ROTATION_TO_BE_IMPORTED to its correct folder used by the package.
+# Make a copy of a Nginx file from ROTATION_TO_BE_IMPORTED to the directory used by this package.
 
 set -euo pipefail
 umask 077
@@ -7,6 +7,7 @@ umask 077
 YEAR="$1"
 MONTH="$2"
 DAY="$3"
+
 YEAR_MONTH="$YEAR-$MONTH"
 FULL_ROOT_PATH="$ROTATION_SUB/$YEAR_MONTH/$DAY"
 FULL_SUM_PATH="$SUMMARY_SUB/$YEAR_MONTH/$DAY"

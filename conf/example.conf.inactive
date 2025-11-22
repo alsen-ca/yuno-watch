@@ -1,0 +1,2 @@
+export PERFORM_VISUAL_SUMMARY=true
+export PERFORM_ATTACK_SUMMARY=true

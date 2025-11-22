@@ -19,14 +19,10 @@ from datetime import datetime, timedelta, timezone
 import matplotlib.pyplot as plt
 from visual.visual_default import VisualDefault
 
-DAYS_BACK=7
-script_name="summarized_log"
 year_month=datetime.today().strftime('%Y-%m')
 yesterday_day_only=(datetime.today() - timedelta(days=DAYS_BACK)).strftime('%d')
 PATH_IN = f"/{year_month}/{yesterday_day_only}"
 PATH_OUT = f"/{year_month}/{yesterday_day_only}"
-LOG_OUTPUT= f"/{script_name}.log"
-TIMESTAMP = datetime.now().strftime("%Y-%m-%d %H-%M")
 
 REQ_PATTERN = re.compile(
     r'''
@@ -46,92 +42,7 @@ ATTACK_PATTERN = re.compile(
     re.VERBOSE,
 )
 
-class Reader:
-    def __init__(self):
-        self.file_path = self.find_file()
 
-    def find_file(self):
-        """
-        Looks for ``access.log`` in the directory given by the
-        environment variable PATH_IN. Returns the absolute path if the
-        file exists, otherwise exits the program.
-        """
-        base_dir = PATH_IN
-        if not base_dir:
-            sys.exit('ERROR: PATH_IN constant is empty or undefined.')
-
-        file_date = (datetime.today() - timedelta(days=DAYS_BACK)).strftime('%Y%m%d')
-        access_file = "access.log" + "-" + file_date
-        candidate = os.path.join(base_dir, access_file)
-
-        if os.path.isfile(candidate):
-            return candidate
-        else:
-            sys.exit(f'ERROR: {candidate} not found.')
-    
-    def file(self):
-        """Return the path discovered by find_file()."""
-        return self.file_path
-
-    def file_string(self):
-        """Returns the actual file"""
-        with open(self.file_path, "r", encoding="utf-8") as f:
-            return f.read()
-        
-
-
-class Writer:
-    def __init__(self, path: str):
-        self.path = path
-        self.clean_file()
-        self.general()
-
-    def clean_file(self):
-        """Remove any existing content from the log file"""
-        full_path = os.path.join(PATH_OUT, "summary.log")
-        with open(full_path, "w", encoding="utf-8") as f:
-            f.write("")
-        attacks_path = os.path.join(PATH_OUT, "attacks.log")
-        with open(attacks_path, "w", encoding="utf-8") as f:
-            f.write("")
-
-    def perform_write(self, to_write, file_output: str = "summary.log"):
-        """
-        Called by the other Writer functions. This function performs the actual
-        writing to the file. It appends to its already existing text
-        """
-        full_path = os.path.join(PATH_OUT, file_output)
-        if file_output == "summary.log" or file_output == "attacks.log":
-            with open(full_path, "a", encoding="utf-8") as f:
-                f.write(to_write)
-                f.write("\n")  
-        else:
-            with open(full_path, "wb") as f:
-                f.write(to_write)
-
-    def general(self):
-        self.perform_write(f"Summarizing following file: {self.path}")
-        self.perform_write(f"Current time: {TIMESTAMP}")
-        self.perform_write("Summarizing log from: Nginx\n")
-
-    def log(self, log_summary):
-        """Recieves log summary from Summarizer and tells perform_write to write this data"""
-        self.perform_write("\n\nLog summary follows: \n")
-        self.perform_write(log_summary)
-    
-    def attacks(self, log_attacks: str):
-        """File summary for potential attack patterns"""
-        self.perform_write(log_attacks, "attacks.log")
-
-    def visual(self, log_summary):
-        """
-        Recieves a more compact log summary from Summarizer. Transforms it with matlibplot
-        into an actual image.
-        """
-        build = VisualDefault(log_summary)
-        img_content = build.render()
-        img_name = "summary.png"
-        self.perform_write(img_content, img_name)
 
 
 class Summarizer:
@@ -157,7 +68,7 @@ class Summarizer:
     def dissect_line(self, line):
         """Takes a single line, takes the values from it and saves it to another file.
         If regex fails, assume request is malicious and write it to a separate summarize file"""
-        match = ORIGINAL_LOG.match(line)
+        match = DEFAULT_PATTERN.match(line)
         if not match:
             attack_match = ATTACK_PATTERN.match(line)
             if attack_match:
