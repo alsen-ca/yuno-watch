@@ -6,9 +6,10 @@ Automated lightweight Nginx log workflow – rotation, compression, deletion, pa
 This is a work in progress. You might make a copy of this repo and use the files according to the License, but the Quickstart won't work.
 
 This is not a bundled package, so you might need to perform additional steps than those written here in order for the library to work.
+Updates might also break existing configurations. Proceed with caution
 
 ## Requirements
-- Root / sudo access: Required for installation and changing performing some actions
+- Root / sudo access: Required for installation and performing some actions
 - Operating System: Linux (tested on Fedora, CentOS)
 - Git (preferred, but curl also possible): Required for installation
 - Docker (Or change PERFORM_SUMMARY= in Configuration)
@@ -20,7 +21,7 @@ This is not a bundled package, so you might need to perform additional steps tha
 - yuno-watch/install.sh
 
 ## CLI-Wrapper
-To call the scripts for this package, the cli-wrapper at /usr/local/bin should have been install when you yuno-watch/install.sh
+To call the scripts for this package, the cli-wrapper at /usr/local/bin should have been installed when you sh yuno-watch/install.sh
 
 This allows you to call the scripts with the appropiate permissions like
 
@@ -33,8 +34,8 @@ The actions allowed are the following:
 
 
 1. tests - Optional (requires bats installed). Checks  whether the script has been installed correctly
-2. [action](#actions) - Long term functionality of the package
-3. [perform](#performs)
+2. [action](#actions) - Long term functionality of the package; repeated call of scripts by systemd timer
+3. [perform](#performs) - One time command
 4. docker
 
 ## Configurations
@@ -177,7 +178,7 @@ For such a case, you can call the command --no-visual and alternatively --no-pat
 
 This is equivalent to writing
 
-    yuno perform summary --year <YY> PERFORM_VISUAL_SUMMARY=false PERFORM_SUMMARY_ATTACK=true
+    yuno perform summary --year <YY> PERFORM_VISUAL_SUMMARY=false PERFORM_SUMMARY_ATTACK=false
 
 You can also just perform the visual summary for a month. Only possible if summary for month already happened
 

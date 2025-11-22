@@ -8,4 +8,4 @@ MONTH="${DATE#*-}" # 11-21
 MONTH="${MONTH%%-*}" # 11
 DAY="${DATE##*-}" # 21
 
-sh /usr/local/src/yuno-watch/lib/nginx_rotator.sh $YEAR $MONTH $DAY
+sh "$LIB_DIR/nginx_rotator.sh" $YEAR $MONTH $DAY

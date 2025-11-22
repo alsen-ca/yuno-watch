@@ -19,3 +19,7 @@
 @test "Configuration nginx output variable gets overwritten for tests" {
     [ "$NGINX_LOGS" = "${LOG_OUTPUT}" ]
 }
+
+@test "Configuration to-be-imported variable gets overwritten for tests" {
+    [ "$ROTATION_TO_BE_IMPORTED" = "$ROTATION_TEST_TO_BE_IMPORTED" ]
+}

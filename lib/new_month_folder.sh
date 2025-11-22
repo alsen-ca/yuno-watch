@@ -4,7 +4,7 @@
 set -euo pipefail
 umask 077
 
-
+# Expect YY-mm e.g., 2025-11
 YEAR_MONTH="$1"
 ARCHIVED_LOGS="$ROTATION_SUB/$YEAR_MONTH"
 SUMMARIZED_LOGS="$SUMMARY_SUB/$YEAR_MONTH"

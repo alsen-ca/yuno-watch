@@ -94,6 +94,7 @@ sudo -u "$NAME" bash -s "$@" <<'EOF'
                 export ROTATION_SUB="$ROTATION_TEST"
                 export SUMMARY_SUB="$SUMMARY_TEST"
                 export NGINX_LOGS="$LOG_OUTPUT"
+                export ROTATION_TO_BE_IMPORTED="$ROTATION_TEST_TO_BE_IMPORTED"
                 "$SCRIPT"
             )
             ;;

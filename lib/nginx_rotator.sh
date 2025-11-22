@@ -10,21 +10,18 @@ source $LIB_DIR/global-functions.sh
 
 YEAR="$1"
 MONTH="$2"
-YEAR_MONTH="$YEAR-$MONTH"
 DAY="$3"
+YEAR_MONTH="$YEAR-$MONTH"
 FULL_ROT_PATH="$ROTATION_SUB/$YEAR_MONTH/$DAY"
 FULL_SUM_PATH="$SUMMARY_SUB/$YEAR_MONTH/$DAY"
 
-echo "year month: $YEAR_MONTH"
-echo "day: $DAY"
 shopt -s nullglob
 files=("$NGINX_LOGS"/*.log-"$YEAR$MONTH$DAY")
-printf "files to move: %s\n" "${files[@]}"
-
-mkdir -p $FULL_ROT_PATH $FULL_SUM_PATH
-chown $NAME:$NAME $FULL_ROT_PATH $FULL_SUM_PATH
+log_info "files to move: %s\n" "${files[@]}"
 
 if (( ${#files[@]} )); then
+    mkdir -p $FULL_ROT_PATH $FULL_SUM_PATH
+    chown $NAME:$NAME $FULL_ROT_PATH $FULL_SUM_PATH
     mv "${files[@]}" $FULL_ROT_PATH/
     chown $NAME:$NAME $FULL_ROT_PATH/*
 else
