@@ -15,8 +15,16 @@ sudo -u "$NAME" bash -s "$@" <<'EOF'
         exit 1
     fi
 
-    export $(cut -d= -f1 "$CONF_FILE")
+    for conf in "/etc/yuno-watch"/*.conf; do
+        if [[ "$conf" != "$CONF_FILE" && -f "$conf" ]]; then
+            source "$conf"
+        fi
+    done
 
+    # Export all variables from configuration files
+    while IFS= read -r var; do
+        export "$var"
+    done < <(compgen -v | grep -E '^[A-Z]')
 
     if [ ! -d "$BASE_DIR" ]; then
         echo "Error: YunoWatch installation not found at $BASE_DIR" >&2
@@ -68,6 +76,7 @@ sudo -u "$NAME" bash -s "$@" <<'EOF'
     shift
     SCRIPT_NAME="$1"
     shift
+    export SCRIPT_NAME
 
     case "$COMMAND" in
         test)
@@ -76,6 +85,7 @@ sudo -u "$NAME" bash -s "$@" <<'EOF'
                 echo "Error: Test script not found: $SCRIPT" >&2
                 exit 1
             fi
+            
             (
                 export TERM=xterm-256color
                 cd "$BASE_DIR"
@@ -83,10 +93,11 @@ sudo -u "$NAME" bash -s "$@" <<'EOF'
                 export ERROR_OUTPUT="${LOG_OUTPUT}/test.error.log"
                 export ROTATION_SUB="$ROTATION_TEST"
                 export SUMMARY_SUB="$SUMMARY_TEST"
+                export NGINX_LOGS="$LOG_OUTPUT"
                 "$SCRIPT"
             )
             ;;
-        action|perform|docker|test)
+        action|perform|docker)
             ARGS=("$@")
             trap 'FAILED_COMMAND="${BASH_COMMAND}"; FAILED_LINE="${BASH_LINENO[0]}"' ERR
             SCRIPT="$BASE_DIR/$COMMAND/$SCRIPT_NAME.sh"

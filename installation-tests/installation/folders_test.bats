@@ -20,7 +20,7 @@ setup() {
 
     run  stat -c "%a" "$LOG_OUTPUT"
     [ "$status" -eq 0 ]
-    [ "$output" = "750" ]
+    [ "$output" = "770" ]
 }
 
 

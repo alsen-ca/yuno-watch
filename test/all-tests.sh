@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-sh "$TESTS/correct-installation.sh"
-sh "$TESTS/all-perform.sh"
+bash "$TESTS/correct-installation.sh"
+bash "$TESTS/all-perform.sh"
 
 sh "$TESTS/cleanup.sh"

@@ -19,7 +19,7 @@ sudo -u $NAME chmod -R 700 $ROTATION_ROOT $SUMMARY_ROOT $CONF $BASE_DIR
 
 
 sudo chown root:$NAME $LOG_OUTPUT
-sudo chmod 750 $LOG_OUTPUT
+sudo chmod 770 $LOG_OUTPUT
 
 sudo touch $SUCCESS_OUTPUT $ERROR_OUTPUT
 sudo chown $NAME:$NAME $SUCCESS_OUTPUT $ERROR_OUTPUT

@@ -15,3 +15,7 @@
 @test "Configuration error output variable gets overwritten for tests" {
     [ "$ERROR_OUTPUT" = "${LOG_OUTPUT}/test.error.log" ]
 }
+
+@test "Configuration nginx output variable gets overwritten for tests" {
+    [ "$NGINX_LOGS" = "${LOG_OUTPUT}" ]
+}

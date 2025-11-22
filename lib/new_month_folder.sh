@@ -1,6 +1,4 @@
 #!/bin/bash
-# new_month_folder.sh
-# -------------------
 # Recieves a month in the Argument and creates the Rotation and Summary folders based on it.
 
 set -euo pipefail
