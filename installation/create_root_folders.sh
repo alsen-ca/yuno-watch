@@ -1,9 +1,10 @@
 #!/bin/bash
-
 set -euo pipefail
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CONF_NAME="yuno-watch.conf"
-CONF_FILE="/home/debrian/Downloads/yuno-watch/$CONF_NAME"
+CONF_FILE="$SCRIPT_DIR/../$CONF_NAME"
+
 if [[ -f "$CONF_FILE" ]]; then
     source "$CONF_FILE"
 else

@@ -1,7 +1,8 @@
 #!/usr/bin/env bats
 
 setup() {
-    DIR="/home/debrian/Downloads/yuno-watch"
+    SCRIPT_DIR="$BATS_TEST_DIRNAME"
+    DIR="$SCRIPT_DIR/../.."
 }
 
 @test "Directory $DIR exists" {

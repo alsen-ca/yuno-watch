@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-bats /home/debrian/Downloads/yuno-watch/installation-tests/setup/os_user_test.bats
-bats /home/debrian/Downloads/yuno-watch/installation-tests/setup/os_downloads_test.bats
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+bats $SCRIPT_DIR/setup/os_user_test.bats
+bats $SCRIPT_DIR/setup/os_downloads_test.bats

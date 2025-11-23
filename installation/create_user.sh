@@ -1,8 +1,8 @@
 #!/bin/bash
-
 set -euo pipefail
 
-CONF_FILE="/home/debrian/Downloads/yuno-watch/yuno-watch.conf"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CONF_FILE="$SCRIPT_DIR/../yuno-watch.conf"
 if [[ -f "$CONF_FILE" ]]; then
     source "$CONF_FILE"
 else
@@ -10,4 +10,9 @@ else
     exit 1
 fi
 
-sudo useradd --system --no-create-home --shell /sbin/nologin "$NAME"
+if id "$NAME" &>/dev/null; then
+    echo "This user already exists, passing."
+else
+    sudo useradd --system --no-create-home --shell /sbin/nologin "$NAME"
+    echo "User $NAME created."
+fi

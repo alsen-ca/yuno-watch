@@ -1,7 +1,8 @@
 #!/usr/bin/env bats
 
 setup() {
-    CONF_FILE="/home/debrian/Downloads/yuno-watch/yuno-watch.conf"
+    SCRIPT_DIR="$BATS_TEST_DIRNAME"
+    CONF_FILE="$SCRIPT_DIR/../../yuno-watch.conf"
     if [[ -f "$CONF_FILE" ]]; then
         source "$CONF_FILE"
     else

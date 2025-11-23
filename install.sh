@@ -6,3 +6,5 @@ sh $SCRIPT_DIR/installation/create_user.sh
 sh $SCRIPT_DIR/installation/create_root_folders.sh
 sh $SCRIPT_DIR/installation/copy-pack.sh
 sh $SCRIPT_DIR/installation/copy-wrapper.sh
+
+echo "YunoWatch successfully installed"
