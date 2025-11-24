@@ -1,9 +1,9 @@
 import io
-
 from matplotlib.ticker import FixedFormatter, FixedLocator
-from .matplotlib_setup import plt
 from typing import Any, List, Tuple
-from .visual_common import _make_figure
+
+from .common import _make_figure
+from .matplotlib_setup import plt
 
 class VisualDefault:
     def __init__(self, bucket_dic: dict):

@@ -1,7 +1,7 @@
 import io
 from .matplotlib_setup import plt
 from typing import Any, List, Tuple
-from .visual_common import _make_figure
+from .common import _make_figure
 
 class VisualWithRequest:
     def __init__(self, bucket_dic):
