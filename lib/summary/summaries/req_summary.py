@@ -1,12 +1,14 @@
 from summaries.base_summarizer import BaseSummarizer
 from statistics import mean
+from collections import defaultdict
+import utils.writer as writer
 
 class Summarizer(BaseSummarizer):
-    def __init__(self, lines, pattern, attack_pattern):
-        super().__init__(lines, pattern, attack_pattern)
+    def __init__(self, lines, pattern, attack_pattern, dir_output):
+        super().__init__(lines, pattern, attack_pattern, dir_output)
         self.bucket_req_times: defaultdict[str, list[float]] = defaultdict(list)
 
-    def summarize(self):
+    def generate_summary(self):
         """
         Build the final dictionary that combines:
 
@@ -40,9 +42,9 @@ class Summarizer(BaseSummarizer):
             if attack_match:
                 path = attack_match.group("path")
                 status = attack_match.group("status")
-                writer.write_log("attack.log", f"{path} - {status}")
+                writer.write_log(f"{self.dir_output}/attacks.log", f"{path} - {status}")
             else:
-                print(f"Current malicious line: {line}")
+                print(f"Error! Unexpected line does not match regex. Current malicious line: {line}")
             return
         
         ip = match.group("ip")

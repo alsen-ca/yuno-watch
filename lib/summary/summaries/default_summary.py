@@ -32,7 +32,7 @@ class Summarizer(BaseSummarizer):
             if attack_match:
                 path = attack_match.group("path")
                 status = attack_match.group("status")
-                #writer.write_log(f"{dir_output}/attack.log", f"{path} - {status}")
+                writer.write_log(f"{self.dir_output}/attacks.log", f"{path} - {status}")
             else:
                 print(f"Current malicious line: {line}")
             return

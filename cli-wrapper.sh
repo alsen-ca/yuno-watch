@@ -31,6 +31,32 @@ sudo -u "$NAME" bash -s "$@" <<'EOF'
         exit 1
     fi
 
+    config_args=()
+    args=("$@")
+    new_args=()
+
+    # Export key from --config
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --config)
+                shift
+                while [[ $# -gt 0 && "$1" != -* ]]; do
+                    # Parse key=value pairs
+                    IFS='=' read -r key value <<< "$1"
+                    export "$key=$value"
+                    shift
+                done
+                ;;
+            *)
+                new_args+=("$1")
+                shift
+                ;;
+        esac
+    done
+
+    # Have only the arguments without --config be kept
+    set -- "${new_args[@]}"
+
     # At least 1 argument provided
     if [ $# -lt 1 ]; then
         echo "ERROR: Provide at least 1 argument"

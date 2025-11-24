@@ -196,8 +196,6 @@ Performs are called like
 Performs the summary for specific date or date range.
 
     yuno perform summary <YY-mm-dd>
-    yuno perform summary --month <YY-mm>
-    yuno perform summary --year <YY>
 
 If a date range (month or year) is chosen, then it will create an individual summary per day. If you have PERFORM_VISUAL_SUMMARY, you might not want this.
 
@@ -207,11 +205,11 @@ For such a case, you can call the command --no-visual and alternatively --no-pat
 
 This is equivalent to writing
 
-    yuno perform summary --year <YY> PERFORM_VISUAL_SUMMARY=false PERFORM_SUMMARY_ATTACK=false
+    yuno perform summary --year <YY> --config PERFORM_VISUAL_SUMMARY=false PERFORM_SUMMARY_ATTACK=false
 
 You can also just perform the visual summary for a month. Only possible if summary for month already happened
 
-    yuno perform summary --no-pattern --no-basic PERFORM_VISUAL_SUMMARY=true INTERVAL_VISUAL_SUMMARY="monthly"
+    yuno perform summary --no-pattern --no-basic <YY-mm> PERFORM_VISUAL_SUMMARY=true INTERVAL_VISUAL_SUMMARY="monthly"
 
 ### Import
 If you already have logs and want them summarized or want them on the new structure, this is the command.

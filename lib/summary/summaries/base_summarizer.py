@@ -3,7 +3,7 @@ from collections import defaultdict
 import re
 
 class BaseSummarizer:
-    def __init__(self, lines: str, pattern, attack_pattern):
+    def __init__(self, lines: str, pattern, attack_pattern, dir_output):
         if isinstance(lines, str):
             self.lines = lines.splitlines()
         else:
@@ -11,6 +11,7 @@ class BaseSummarizer:
             self.lines = [ln.rstrip("\n") for ln in lines]
         self.pattern = pattern
         self.attack_pattern = attack_pattern
+        self.dir_output = dir_output
         self.unique_ips: set[str] = set()
         self.unique_users: set[tuple[str, str]] = set()
         self.bucket_unique_hits: defaultdict[str, set[tuple[str, str]]] = defaultdict(set)

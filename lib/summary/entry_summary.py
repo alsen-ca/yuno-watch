@@ -20,7 +20,7 @@ def load_regex_pattern():
 
 def load_attack_pattern():
     """Load the regex pattern for detecting attacks."""
-    attack_pattern_file = f"{sum_dir}/log_regex/attack.txt"
+    attack_pattern_file = f"{sum_dir}/log_regex/attacks.txt"
     with open(attack_pattern_file, "r") as f:
         attack_pattern = f.read().strip()
     return re.compile(attack_pattern, re.VERBOSE)
@@ -34,10 +34,12 @@ def main(file_name: str, dir_output: str):
     writer.clean_file(f"{dir_output}/attacks.log")
     attack_pattern = load_attack_pattern()
     SummarizerClass = get_summarizer_class()
-    sum = SummarizerClass(lines, pattern, attack_pattern)
+    sum = SummarizerClass(lines, pattern, attack_pattern, dir_output)
     summary = sum.summarize()
     printable_summary = sum.print_dic(summary)
     writer.write_log(f"{dir_output}/summary.log", printable_summary)
+
+    writer.save_summary_data(dir_output, file_name, summary, sum.total_unique_ips())
 
 
 
