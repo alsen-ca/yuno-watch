@@ -18,4 +18,5 @@ for file in $DIRECTORY_TO_IMPORT/$NGINX_ORIGINAL_FILENAME-*; do
     DAY="${DATE:6:2}"
 
     sh "$LIB_DIR/nginx_importer.sh" $YEAR $MONTH $DAY
+    sh "$LIB_DIR/nginx_summary.sh" $YEAR $MONTH $DAY
 done

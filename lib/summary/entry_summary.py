@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from utils.reader import file_content
+import utils.reader as reader
 import utils.writer as writer
 from summaries import get_summarizer_class
 import utils.writer as writer
@@ -28,18 +28,42 @@ def load_attack_pattern():
 
 def main(file_name: str, dir_output: str):
     print("This is the folder where this file will write the summaries: ", dir_output)
-    lines = file_content(file_name)
-    pattern = load_regex_pattern()
-    writer.clean_file(f"{dir_output}/summary.log")
-    writer.clean_file(f"{dir_output}/attacks.log")
-    attack_pattern = load_attack_pattern()
-    SummarizerClass = get_summarizer_class()
-    sum = SummarizerClass(lines, pattern, attack_pattern, dir_output)
-    summary = sum.summarize()
-    printable_summary = sum.print_dic(summary)
-    writer.write_log(f"{dir_output}/summary.log", printable_summary)
+    will_basic_summary = os.environ.get("PERFORM_BASIC_SUMMARY", "").lower() == "true"
+    will_visual_summary = os.environ.get("PERFORM_VISUAL_SUMMARY", "").lower() == "true"
+    
+    if will_basic_summary:
+        lines = reader.file_content(file_name)
+        pattern = load_regex_pattern()
+        writer.clean_file(f"{dir_output}/summary.log")
+        writer.clean_file(f"{dir_output}/attacks.log")
+        attack_pattern = load_attack_pattern()
 
-    writer.save_summary_data(dir_output, file_name, summary, sum.total_unique_ips())
+        SummarizerClass = get_summarizer_class()
+        sum = SummarizerClass(lines, pattern, attack_pattern, dir_output)
+        summary = sum.summarize()
+        writer.save_summary_data(dir_output, file_name, summary, sum.total_unique_ips())
+
+        data_summary = reader.load_data_from_json(dir_output, "summary")
+        printable_summary = sum.print_dic(data_summary)
+        data_date = reader.load_data_from_json(dir_output, "date")
+        data_total_ips = reader.load_data_from_json(dir_output, "total_unique_ips")
+        printable_total_ips = str(data_total_ips)
+        writer.write_log(f"{dir_output}/summary.log", f"Date of summary: {data_date}")
+        writer.write_log(f"{dir_output}/summary.log", f"\nTotal amount of unique IPs: {printable_total_ips}\n\n\n")
+        writer.write_log(f"{dir_output}/summary.log", f"\nPrinting Unique Users per 15-minute buckets: \n\n{printable_summary}\n")
+
+        writer.write_log(f"{dir_output}/summary.log", f"\nMost visited paths: \n\n{sum.get_status_path_freq()}")
+        paths_4xx = sum.get_4xx_paths()
+        writer.write_log(f"{dir_output}/4xx.log", paths_4xx)
+    else:
+        print("No Basic Summary will happen")
+    
+    if will_visual_summary:
+        print("Notice: Visual Summary will happen")
+    else:
+        print("No Visual Summary will happen") 
+    
+
 
 
 

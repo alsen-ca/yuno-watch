@@ -40,6 +40,11 @@ class Summarizer(BaseSummarizer):
         ip = match.group("ip")
         user_agent = match.group("user_agent")
         raw_time = match.group("time_local")
+        status = match.group("status")
+        path = match.group("path")
+        method = match.group("method")
+
+        self._update_status_path_freq(method, status, path)
 
         access_time = self.parse_nginx_time(raw_time)
         self.unique_ips.add(ip)
