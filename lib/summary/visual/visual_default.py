@@ -1,13 +1,16 @@
 import io
 from matplotlib.ticker import FixedFormatter, FixedLocator
+from matplotlib.axes import Axes
 from typing import Any, List, Tuple
 
 from .common import _make_figure
 from .matplotlib_setup import plt
 
 class VisualDefault:
-    def __init__(self, bucket_dic: dict):
+    def __init__(self, date: str, ips: int, bucket_dic: dict):
         self.bucket_dic = bucket_dic
+        self.date = date
+        self.ips = ips
 
     def _extract_values(self) -> Tuple[List[Any], List[int]]:
         buckets = list(self.bucket_dic.keys())
@@ -22,6 +25,16 @@ class VisualDefault:
     def render(self) -> bytes:
         buckets, uniq_users = self._extract_values()
         fig, ax = _make_figure()
+
+        info_text = f"Date: {self.date}\nAmount of Unique IP Addresses: {self.ips}"
+        ax.text(
+            0.02,
+            1.15 * max(uniq_users),
+            info_text,
+            verticalalignment="bottom",
+            bbox=dict(boxstyle="round", facecolor="white", alpha=0.8),
+        )
+
         ax.plot(buckets, uniq_users, marker=None, color="red", label="Unique users")
         orig_ticks = ax.get_xticks()
 

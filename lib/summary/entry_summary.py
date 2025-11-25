@@ -30,7 +30,8 @@ def main(file_name: str, dir_output: str):
     print("This is the folder where this file will write the summaries: ", dir_output)
     will_basic_summary = os.environ.get("PERFORM_BASIC_SUMMARY", "").lower() == "true"
     will_visual_summary = os.environ.get("PERFORM_VISUAL_SUMMARY", "").lower() == "true"
-    
+    uses_docker = os.environ.get("USES_DOCKER", "").lower() == "true"
+
     if will_basic_summary:
         lines = reader.file_content(file_name)
         pattern = load_regex_pattern()
@@ -58,8 +59,21 @@ def main(file_name: str, dir_output: str):
     else:
         print("No Basic Summary will happen")
     
-    if will_visual_summary:
-        print("Notice: Visual Summary will happen")
+    if will_visual_summary and not uses_docker:
+        from visual.visual_default import VisualDefault
+        from visual.visual_req import VisualWithRequest
+
+        data_summary = reader.load_data_from_json(dir_output, "summary")
+        data_date = reader.load_data_from_json(dir_output, "date")
+        data_ips = reader.load_data_from_json(dir_output, "total_unique_ips")
+        date_obj = datetime.strptime(data_date, "%d.%m.%Y")
+        previous_day = date_obj - timedelta(days=1)
+        previous_day_str = previous_day.strftime("%d.%m.%Y")
+        if os.environ.get("NGINX_LOG_FORMAT") == "default":
+            visual_summary = VisualDefault(previous_day_str, data_ips, data_summary).render()
+        elif os.environ.get("NGINX_LOG_FORMAT") == "req":
+            visual_summary = VisualWithRequest(data_summary).render()
+        writer.write_bytes(dir_output, visual_summary)
     else:
         print("No Visual Summary will happen") 
     

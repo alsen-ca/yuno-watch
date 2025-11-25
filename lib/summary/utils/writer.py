@@ -12,9 +12,9 @@ def write_log(path: str, content: str):
         f.write(content)
         f.write("\n")
 
-def write_bytes(path, content):
+def write_bytes(dir_output: str, content):
     """Appends bytes to an existing file"""
-    with open(path, "wb") as f:
+    with open(f"{dir_output}/visual.png", "wb") as f:
         f.write(content)
 
 def save_summary_data(dir_output: str, filename: str, summary: dict, unique_ips_count: int):
