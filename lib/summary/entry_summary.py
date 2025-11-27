@@ -56,6 +56,8 @@ def main(file_name: str, dir_output: str):
         writer.write_log(f"{dir_output}/summary.log", f"\nMost visited paths: \n\n{sum.get_status_path_freq()}")
         paths_4xx = sum.get_4xx_paths()
         writer.write_log(f"{dir_output}/4xx.log", paths_4xx)
+        paths_2xx = sum.get_2xx_paths()
+        writer.write_log(f"{dir_output}/2xx.log", paths_2xx)
     else:
         print("No Basic Summary will happen")
     

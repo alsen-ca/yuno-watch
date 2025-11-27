@@ -32,9 +32,9 @@ class Summarizer(BaseSummarizer):
             if attack_match:
                 path = attack_match.group("path")
                 status = attack_match.group("status")
-                writer.write_log(f"{self.dir_output}/attacks.log", f"{path} - {status}")
+                writer.write_log(f"{self.dir_output}/attacks.log", f"{path}")
             else:
-                print(f"Current malicious line: {line}")
+                writer.write_log(f"{self.dir_output}/attacks.log", line)
             return
         
         ip = match.group("ip")

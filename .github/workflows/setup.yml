@@ -2,7 +2,7 @@ name: Setup
 
 on:
   push:
-    branches: [ draft, main ]
+    branches: [ main ]
 
 jobs:
   alma-tests:

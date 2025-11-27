@@ -11,12 +11,14 @@ class BaseSummarizer:
             self.lines = [ln.rstrip("\n") for ln in lines]
         self.pattern = pattern
         self.attack_pattern = attack_pattern
+        self.minimal_pattern = self.load_minimal_pattern()
         self.dir_output = dir_output
         self.unique_ips: set[str] = set()
         self.unique_users: set[tuple[str, str]] = set()
         self.bucket_unique_hits: defaultdict[str, set[tuple[str, str]]] = defaultdict(set)
         self.status_path_freq = Counter()
         self.unique_4xx_paths = set()
+        self.unique_2xx_paths = set()
 
 
     def summarize(self):
@@ -62,6 +64,8 @@ class BaseSummarizer:
         self.status_path_freq[(method, status, path)] += 1
         if status.startswith("4"):
             self.unique_4xx_paths.add(path)
+        if status.startswith("2"):
+            self.unique_2xx_paths.add(path)
 
     def get_status_path_freq(self):
         groups = {
@@ -95,3 +99,12 @@ class BaseSummarizer:
     def get_4xx_paths(self):
         return "\n".join(self.unique_4xx_paths)
         
+    def get_2xx_paths(self):
+        return "\n".join(self.unique_2xx_paths)
+
+    def load_minimal_pattern(self):
+        """Load additional regex pattern for detecting attacks."""
+        minimal_pattern_file = "/usr/local/src/yuno-watch/lib/summary/log_regex/minimal.txt"
+        with open(minimal_pattern_file, "r") as f:
+            minimal_pattern_file = f.read().strip()
+        return re.compile(minimal_pattern_file, re.VERBOSE)

@@ -1,6 +1,5 @@
 import io
 from matplotlib.ticker import FixedFormatter, FixedLocator
-from matplotlib.axes import Axes
 from typing import Any, List, Tuple
 
 from .common import _make_figure
